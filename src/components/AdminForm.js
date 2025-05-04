@@ -3,14 +3,12 @@ import { TextField, IconButton, Grid, Box, Typography, Button, Card, CardContent
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+// Removed unused useNavigate import
 
 import defaultCardImage from '../WhatsApp Image 2024-07-29 at 10.19.49_376f7aab.jpg';
 
 const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
-  // const navigate = useNavigate();
-
-  const [isEditing, setIsEditing] = useState(mode === 'add' || mode === 'edit');
+  // State management
   const [showPreview, setShowPreview] = useState(!(mode === 'add' || mode === 'edit'));
   const [showDeclineView, setShowDeclineView] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,12 +24,13 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
     reason: '',
     customReason: '',
     id: '',
-    image:'',
-    ownerPersonalNumber:'',
-    amountPerHour:'',
-    maxMembersPerHour:''
+    image: '',
+    ownerPersonalNumber: '',
+    amountPerHour: '',
+    maxMembersPerHour: ''
   });
 
+  // Initialize form data from turf prop
   useEffect(() => {
     if (turf) {
       setFormData({
@@ -49,12 +48,13 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
         id: turf.id || '',
         image: turf.image || '',
         ownerPersonalNumber: turf.ownerPersonalNumber || '',
-        amountPerHour:turf.amountPerHour||'',
-        maxMembersPerHour:turf.maxMembersPerHour||''
+        amountPerHour: turf.amountPerHour || '',
+        maxMembersPerHour: turf.maxMembersPerHour || ''
       });
     }
   }, [turf]);
 
+  // Handle form field changes
   const handleChange = useCallback((e) => {
     const { name, value, files } = e.target;
     setFormData((prevState) => ({
@@ -63,6 +63,7 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
     }));
   }, []);
 
+  // Save turf data
   const handleSave = async () => {
     try {
       if (mode === 'notification' && turf.id) {
@@ -78,13 +79,13 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
       }
   
       onSave();
-      setIsEditing(false);
       setShowPreview(true);
     } catch (error) {
       console.error('Failed to save turf:', error);
     }
   };
 
+  // Save decline reason and delete turf
   const handleSaveAndDelete = async () => {
     try {
       const declineData = {
@@ -103,7 +104,6 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
       }
 
       onSave(saveResponse.data);
-      setIsEditing(false);
       setShowPreview(true);
 
     } catch (error) {
@@ -111,22 +111,23 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
     }
   };
 
+  // Switch to decline view
   const handleDecline = () => {
     setShowDeclineView(true);
   };
 
+  // Handle reason field change
   const handleReasonChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
   };
+
+  // Switch to edit mode
   const handleEdit = () => {
-    setIsEditing(true);
     setShowPreview(false);
   };
-
-  
 
   return (
     <Box
@@ -256,15 +257,15 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
                   </label>
                 ) : (
                   <CardMedia
-              component="img"
-              sx={{ width: 250, height: 220, borderRadius: '8%' }}
-              image={`data:image/jpeg;base64,${turf.image}`} // Ensure proper Base64 formatting
-              alt="Turf Image"
-              onError={(e) => {
-                console.error('Error loading image:', e.target.src);
-                e.target.src = defaultCardImage; // Provide fallback image
-              }}
-            />
+                    component="img"
+                    sx={{ width: 250, height: 220, borderRadius: '8%' }}
+                    image={`data:image/jpeg;base64,${turf.image}`}
+                    alt="Turf Image"
+                    onError={(e) => {
+                      console.error('Error loading image:', e.target.src);
+                      e.target.src = defaultCardImage;
+                    }}
+                  />
                 )}
               </Grid>
               <Grid item xs>
@@ -350,34 +351,33 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
                         {formData.services || 'Services'}
                       </Typography>
                       <Typography
-  variant="subtitle1"
-  color="textSecondary"
-  sx={{ marginBottom: 1 }}
->
-  <i className="fas fa-rupee-sign"></i> {formData.amountPerHour || 'Amount Per Hour'}
-</Typography>
+                        variant="subtitle1"
+                        color="textSecondary"
+                        sx={{ marginBottom: 1 }}
+                      >
+                        <i className="fas fa-rupee-sign"></i> {formData.amountPerHour || 'Amount Per Hour'}
+                      </Typography>
                       {mode === 'notification' && (
-  <Box sx={{ marginTop: 2 }}>
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={() => {
-        handleSave();
-        // handleAccept(); // Use the new handleAccept function
-        setShowPreview(true);
-      }}
-    >
-      Accept
-    </Button>
-    <Button
-      variant="contained"
-      color="secondary"
-      sx={{ marginLeft: 1 }}
-      onClick={handleDecline}
-    >
-      Decline
-    </Button>
-  </Box>
+                        <Box sx={{ marginTop: 2 }}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                              handleSave();
+                              setShowPreview(true);
+                            }}
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            sx={{ marginLeft: 1 }}
+                            onClick={handleDecline}
+                          >
+                            Decline
+                          </Button>
+                        </Box>
                       )}
                     </div>
                   ) : (
@@ -462,16 +462,27 @@ const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
                           />
                         </Grid>
                         <Grid item xs={12}>
-  <TextField
-    label="Amount Per Hour"
-    name="amountPerHour"
-    value={formData.amountPerHour}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-    InputLabelProps={{ shrink: true }}
-  />
-</Grid>
+                          <TextField
+                            label="Amount Per Hour"
+                            name="amountPerHour"
+                            value={formData.amountPerHour}
+                            onChange={handleChange}
+                            fullWidth
+                            size="small"
+                            InputLabelProps={{ shrink: true }}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            label="Max Members Per Hour"
+                            name="maxMembersPerHour"
+                            value={formData.maxMembersPerHour}
+                            onChange={handleChange}
+                            fullWidth
+                            size="small"
+                            InputLabelProps={{ shrink: true }}
+                          />
+                        </Grid>
                       </Grid>
                       <Box
                         sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: 2 }}
