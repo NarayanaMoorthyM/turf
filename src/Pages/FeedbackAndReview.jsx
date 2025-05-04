@@ -1,27 +1,15 @@
 import React, { useState } from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  IconButton,
-  AspectRatio,
-} from '@mui/joy';
-import ThumbUp from '@mui/icons-material/ThumbUp';
-import ReportProblem from '@mui/icons-material/ReportProblem';
-import Rating from '@mui/material/Rating';
-import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
-import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
-import { Form } from 'react-bootstrap';
-import ph1 from '../th(1).jpeg';
-import ph2 from '../th(2).jpeg';
-import ph3 from '../th(3).jpeg';
-import ph4 from '../th(4).jpeg';
-import ph5 from '../th(5).jpeg';
-import ph6 from '../th(6).jpeg';
+import { Camera, ThumbsUp, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const photosData = [ph1, ph2, ph3, ph4, ph5, ph6];
+// Sample photos (replace with placeholder images for demonstration)
+const photosData = [
+  "/api/placeholder/400/320",
+  "/api/placeholder/400/320", 
+  "/api/placeholder/400/320",
+  "/api/placeholder/400/320",
+  "/api/placeholder/400/320",
+  "/api/placeholder/400/320"
+];
 
 const initialReviewsData = [
   {
@@ -30,7 +18,7 @@ const initialReviewsData = [
     title: 'Great service!',
     content: 'I really enjoyed the experience.',
     helpful: 12,
-    profilePic: 'https://randomuser.me/api/portraits/men/32.jpg',
+    profilePic: "/api/placeholder/100/100",
   },
   {
     name: 'Jane Smith',
@@ -38,7 +26,7 @@ const initialReviewsData = [
     title: 'Good service',
     content: 'Good service but room for improvement.',
     helpful: 8,
-    profilePic: 'https://randomuser.me/api/portraits/women/44.jpg',
+    profilePic: "/api/placeholder/100/100",
   },
   {
     name: 'Bob Brown',
@@ -46,7 +34,7 @@ const initialReviewsData = [
     title: 'Average experience',
     content: 'It was okay.',
     helpful: 5,
-    profilePic: 'https://randomuser.me/api/portraits/men/45.jpg',
+    profilePic: "/api/placeholder/100/100",
   },
   {
     name: 'Alice Johnson',
@@ -54,7 +42,7 @@ const initialReviewsData = [
     title: 'Pretty good!',
     content: 'Would come again.',
     helpful: 9,
-    profilePic: 'https://randomuser.me/api/portraits/women/56.jpg',
+    profilePic: "/api/placeholder/100/100",
   },
   {
     name: 'Chris Evans',
@@ -62,7 +50,7 @@ const initialReviewsData = [
     title: 'Not what I expected',
     content: 'Could be better.',
     helpful: 3,
-    profilePic: 'https://randomuser.me/api/portraits/men/14.jpg',
+    profilePic: "/api/placeholder/100/100",
   },
   {
     name: 'Emma White',
@@ -70,19 +58,46 @@ const initialReviewsData = [
     title: 'Exceptional service',
     content: 'Friendly staff!',
     helpful: 15,
-    profilePic: 'https://randomuser.me/api/portraits/women/22.jpg',
+    profilePic: "/api/placeholder/100/100",
   },
 ];
+
+// Star Rating Component
+const StarRating = ({ value, onChange, readOnly = false }) => {
+  const [hover, setHover] = useState(null);
+  
+  return (
+    <div className="flex">
+      {[...Array(5)].map((_, index) => {
+        const ratingValue = index + 1;
+        return (
+          <button
+            key={index}
+            type="button"
+            className={`bg-transparent border-none cursor-pointer ${readOnly ? 'cursor-default' : ''}`}
+            onClick={() => onChange && onChange(ratingValue)}
+            onMouseEnter={() => !readOnly && setHover(ratingValue)}
+            onMouseLeave={() => !readOnly && setHover(null)}
+          >
+            <span className={`text-2xl ${(hover || value) >= ratingValue ? 'text-yellow-400' : 'text-gray-300'}`}>
+              ★
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
 
 export default function FeedbackAndReview() {
   const [reviewName, setReviewName] = useState('');
   const [photoIndex, setPhotoIndex] = useState(0);
   const [rating, setRating] = useState(0);
   const [likedReviews, setLikedReviews] = useState({});
-  const [file, setFile] = useState(null);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewContent, setReviewContent] = useState('');
   const [reviewsData, setReviewsData] = useState(initialReviewsData);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleNextPhoto = () => {
     setPhotoIndex((prevIndex) => (prevIndex + 1) % photosData.length);
@@ -100,10 +115,10 @@ export default function FeedbackAndReview() {
   };
 
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    setSelectedFile(event.target.files[0]);
   };
 
-  const handleReviewSubmit = async (event) => {
+  const handleReviewSubmit = (event) => {
     event.preventDefault();
 
     const newReview = {
@@ -111,206 +126,193 @@ export default function FeedbackAndReview() {
       rating,
       title: reviewTitle,
       content: reviewContent,
-      profilePic: 'https://randomuser.me/api/portraits/men/32.jpg', // Replace this with actual profile picture URL
+      profilePic: "/api/placeholder/100/100", // Placeholder for profile picture
       helpful: 0, // Initial helpful count
     };
 
     try {
-      const response = await fetch('http://localhost:8088/api/reviews', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newReview),
-      });
-
-      if (response.ok) {
-        console.log('Review submitted successfully');
-        // Reset form fields after successful submission
-        setReviewName('');
-        setRating(0);
-        setReviewTitle('');
-        setReviewContent('');
-        // Update reviewsData state with the new review
-        setReviewsData((prevReviews) => [newReview, ...prevReviews]);
-      } else {
-        console.error('Failed to submit review');
-      }
+      // In a real application, you would send this to your API
+      console.log('Review to submit:', newReview);
+      console.log('Selected file:', selectedFile);
+      
+      // For demo purposes, we'll just update the state
+      setReviewsData((prevReviews) => [newReview, ...prevReviews]);
+      
+      // Reset form fields after successful submission
+      setReviewName('');
+      setRating(0);
+      setReviewTitle('');
+      setReviewContent('');
+      setSelectedFile(null);
+      
+      // Reset file input (handled differently in React)
+      const fileInput = document.getElementById('file');
+      if (fileInput) fileInput.value = '';
+      
     } catch (error) {
       console.error('Error submitting review:', error);
     }
   };
 
   return (
-    <Box sx={{ maxWidth: '100%', px: 2, py: 4, textAlign: 'left', mx: 7 }}>
-      <Typography
-        level="h4"
-        sx={{
-          fontSize: '1.5rem',
-          borderBottom: '2px solid #007bff',
-          paddingBottom: '5px',
-          marginBottom: '2rem',
-          backgroundColor: 'white',
-          color: '#232f3e',
-        }}
-      >
+    <div className="max-w-full px-8 py-6 mx-auto">
+      <h2 className="text-2xl font-bold pb-2 mb-8 border-b-2 border-blue-500 text-gray-800">
         Customer Reviews
-      </Typography>
+      </h2>
 
       {/* Review Summary */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          mb: 3,
-          justifyContent: 'space-between',
-          flexDirection: { xs: 'column', sm: 'row' },
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Rating value={4.4} precision={0.1} readOnly sx={{ fontSize: '2rem' }} />
-          <Typography level="body1" sx={{ ml: { xs: 0, sm: 2 }, mt: { xs: 2, sm: 0 } }}>
-            4.4 out of 5 stars
-          </Typography>
-        </Box>
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 0 }}
-        >
-          {photosData.slice(photoIndex, photoIndex + 3).map((photo, index) => (
-            <AspectRatio key={index} ratio="1" sx={{ width: '100px', height: '100px', mx: 1 }}>
-              <img src={photo} alt={`Review ${photoIndex + index + 1}`} 
- />
-            </AspectRatio>
-          ))}
-          <IconButton onClick={handlePreviousPhoto} sx={{ ml: 1 }}>
-            <ArrowBackIos />
-          </IconButton>
-          <IconButton onClick={handleNextPhoto} sx={{ ml: 1 }}>
-            <ArrowForwardIos />
-          </IconButton>
-        </Box>
-      </Box>
+      <div className="flex flex-col sm:flex-row items-center mb-6 justify-between">
+        <div className="flex items-center">
+          <StarRating value={4.4} readOnly={true} />
+          <span className="ml-4">4.4 out of 5 stars</span>
+        </div>
+        
+        <div className="flex items-center justify-start mt-4 sm:mt-0">
+          <div className="flex space-x-2">
+            {photosData.slice(photoIndex, photoIndex + 3).map((photo, index) => (
+              <div key={index} className="w-24 h-24 relative">
+                <img 
+                  src={photo} 
+                  alt={`Review ${photoIndex + index + 1}`} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+          <button 
+            onClick={handlePreviousPhoto}
+            className="ml-2 p-1 rounded-full hover:bg-gray-200"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button 
+            onClick={handleNextPhoto}
+            className="ml-1 p-1 rounded-full hover:bg-gray-200"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </div>
 
       {/* Reviews */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 2,
-          maxHeight: '400px',
-          overflowY: 'auto',
-          
-          scrollbarWidth: 'thin',
-          scrollbarColor: '#888 #e0e0e0',
-        }}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
         {reviewsData.map((review, index) => (
-          <Card
-            key={index}
-            variant="outlined"
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2, mb: 2 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <AspectRatio ratio="1" sx={{ width: 60, borderRadius: '50%', overflow: 'hidden', mr: 2 }}>
-                  <img src={review.profilePic} alt={review.name} />
-                </AspectRatio>
-                <Box>
-                  <Typography level="body1" fontWeight="bold">
-                    {review.name}
-                  </Typography>
-                  <Rating value={review.rating} readOnly sx={{ mt: 0.5 }} />
-                </Box>
-              </Box>
-            </Box>
-            <CardContent sx={{ flex: 1 }}>
-              <Typography level="body2" sx={{ mb: 1 }}>
-                {review.content}
-              </Typography>
-            </CardContent>
-            <Box
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 'auto' }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <IconButton
-                  size="small"
-                  color={likedReviews[index] ? 'primary' : 'neutral'}
+          <div key={index} className="border rounded-lg p-4 mb-4 shadow-sm">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center">
+                <div className="w-12 h-12 rounded-full overflow-hidden mr-3">
+                  <img 
+                    src={review.profilePic} 
+                    alt={review.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-bold">{review.name}</h3>
+                  <StarRating value={review.rating} readOnly={true} />
+                </div>
+              </div>
+            </div>
+            
+            <div className="py-2">
+              <h4 className="font-semibold">{review.title}</h4>
+              <p className="text-sm text-gray-700 mt-1">{review.content}</p>
+            </div>
+            
+            <div className="flex items-center justify-between mt-4">
+              <div className="flex items-center space-x-1">
+                <button 
+                  className={`p-1 rounded-full ${likedReviews[index] ? 'text-blue-500' : 'text-gray-500'}`}
                   onClick={() => handleLikeReview(index)}
                 >
-                  <ThumbUp />
-                </IconButton>
-                <Typography level="body2">
+                  <ThumbsUp size={16} />
+                </button>
+                <span className="text-sm">
                   {likedReviews[index] ? parseInt(review.helpful) + 1 : review.helpful}
-                </Typography>
-              </Box>
-              <Button variant="outlined" color="warning" startIcon={<ReportProblem />}>
+                </span>
+              </div>
+              <button className="flex items-center text-sm text-amber-600 px-2 py-1 border border-amber-600 rounded">
+                <AlertTriangle size={14} className="mr-1" />
                 Report
-              </Button>
-            </Box>
-          </Card>
+              </button>
+            </div>
+          </div>
         ))}
-      </Box>
+      </div>
 
       {/* Leave Your Feedback Form */}
-      <Box sx={{ mt: 4, borderTop: '2px solid #007bff', pt: 2 }}>
-        <Typography level="h6" fontWeight="bold" sx={{ mb: 2 }}>
-          Leave Your Feedback
-        </Typography>
-        <Form onSubmit={handleReviewSubmit}>
-          <Form.Group controlId="formName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
+      <div className="mt-8 pt-6 border-t-2 border-blue-500">
+        <h3 className="text-xl font-bold mb-4">Leave Your Feedback</h3>
+        
+        <div className="space-y-4">
+          <div>
+            <label className="block text-gray-700 mb-1" htmlFor="name">Name</label>
+            <input
+              id="name"
               type="text"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Enter your name"
               value={reviewName}
               onChange={(e) => setReviewName(e.target.value)}
               required
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group controlId="formRating">
-            <Form.Label>Rating</Form.Label>
-            <Rating
-              value={rating}
-              onChange={(e, newValue) => setRating(newValue)}
-              precision={0.5}
-              required
-            />
-          </Form.Group>
+          <div>
+            <label className="block text-gray-700 mb-1">Rating</label>
+            <StarRating value={rating} onChange={setRating} />
+          </div>
 
-          <Form.Group controlId="formTitle">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
+          <div>
+            <label className="block text-gray-700 mb-1" htmlFor="title">Title</label>
+            <input
+              id="title"
               type="text"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Review title"
               value={reviewTitle}
               onChange={(e) => setReviewTitle(e.target.value)}
               required
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group controlId="formContent">
-            <Form.Label>Content</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
+          <div>
+            <label className="block text-gray-700 mb-1" htmlFor="content">Content</label>
+            <textarea
+              id="content"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+              rows="3"
               placeholder="Write your review here"
               value={reviewContent}
               onChange={(e) => setReviewContent(e.target.value)}
               required
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group controlId="formFile">
-            <Form.Label>Upload Image (optional)</Form.Label>
-            <Form.Control type="file" onChange={handleFileChange} />
-          </Form.Group>
+          <div>
+            <label className="block text-gray-700 mb-1" htmlFor="file">Upload Image (optional)</label>
+            <div className="flex items-center">
+              <input
+                id="file"
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              <label htmlFor="file" className="cursor-pointer bg-gray-200 px-3 py-2 rounded-md flex items-center">
+                <Camera size={16} className="mr-2" />
+                {selectedFile ? selectedFile.name : "Choose file"}
+              </label>
+            </div>
+          </div>
 
-          <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
+          <button
+            onClick={handleReviewSubmit}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+          >
             Submit Review
-          </Button>
-        </Form>
-      </Box>
-    </Box>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
