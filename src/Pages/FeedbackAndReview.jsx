@@ -79,7 +79,7 @@ export default function FeedbackAndReview() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [rating, setRating] = useState(0);
   const [likedReviews, setLikedReviews] = useState({});
-  // const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewContent, setReviewContent] = useState('');
   const [reviewsData, setReviewsData] = useState(initialReviewsData);
