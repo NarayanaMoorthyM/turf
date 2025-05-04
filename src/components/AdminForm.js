@@ -10,7 +10,7 @@ import defaultCardImage from '../WhatsApp Image 2024-07-29 at 10.19.49_376f7aab.
 const AdminFormPreview = ({ turf, onCancel, onSave, mode, onDecline }) => {
   // const navigate = useNavigate();
 
-  // const [isEditing, setIsEditing] = useState(mode === 'add' || mode === 'edit');
+  const [isEditing, setIsEditing] = useState(mode === 'add' || mode === 'edit');
   const [showPreview, setShowPreview] = useState(!(mode === 'add' || mode === 'edit'));
   const [showDeclineView, setShowDeclineView] = useState(false);
   const [formData, setFormData] = useState({
