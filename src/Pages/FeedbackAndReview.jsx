@@ -79,7 +79,7 @@ export default function FeedbackAndReview() {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [rating, setRating] = useState(0);
   const [likedReviews, setLikedReviews] = useState({});
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewContent, setReviewContent] = useState('');
   const [reviewsData, setReviewsData] = useState(initialReviewsData);
@@ -178,7 +178,8 @@ export default function FeedbackAndReview() {
         >
           {photosData.slice(photoIndex, photoIndex + 3).map((photo, index) => (
             <AspectRatio key={index} ratio="1" sx={{ width: '100px', height: '100px', mx: 1 }}>
-              <img src={photo} alt={`Review photo ${photoIndex + index + 1}`} />
+              <img src={photo} alt={`Review ${photoIndex + index + 1}`} 
+ />
             </AspectRatio>
           ))}
           <IconButton onClick={handlePreviousPhoto} sx={{ ml: 1 }}>
