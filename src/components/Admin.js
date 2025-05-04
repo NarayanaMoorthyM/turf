@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import AdminTable from "./AdminTable";
 import AdminFormPreview from "./AdminForm"; // Make sure this import is correct
 import NotificationDropdown from "./NotificationDropdown";
@@ -13,39 +13,39 @@ function Admin({ initialTurfData }) {
     const [showForm, setShowForm] = useState(false);
     const [formMode, setFormMode] = useState("");
 
-    const fetchTurfs = async () => {
-        try {
-            const response = await axios.get("http://localhost:8081/api/turfs");
-            setTurfs(response.data);
-        } catch (error) {
-            console.error("Failed to fetch turfs:", error);
-        }
-    };
+    // const fetchTurfs = async () => {
+    //     try {
+    //         const response = await axios.get("http://localhost:8081/api/turfs");
+    //         setTurfs(response.data);
+    //     } catch (error) {
+    //         console.error("Failed to fetch turfs:", error);
+    //     }
+    // };
 
-    const addTurf = async (turf) => {
-        try {
-            const response = await axios.post("http://localhost:8081/api/turfs", turf);
-            setTurfs([...turfs, response.data]);
-            setShowForm(false);
-        } catch (error) {
-            console.error("Failed to add turf:", error);
-        }
-    };
+    // const addTurf = async (turf) => {
+    //     try {
+    //         const response = await axios.post("http://localhost:8081/api/turfs", turf);
+    //         setTurfs([...turfs, response.data]);
+    //         setShowForm(false);
+    //     } catch (error) {
+    //         console.error("Failed to add turf:", error);
+    //     }
+    // };
 
-    const updateTurf = async (updatedTurf) => {
-        if (!updatedTurf || !updatedTurf.id) {
-            console.error("No turf or turf ID provided for update");
-            return;
-        }
-        try {
-            const response = await axios.put(`http://localhost:8081/api/turfs/${updatedTurf.id}`, updatedTurf);
-            setTurfs(turfs.map(turf => (turf.id === updatedTurf.id ? response.data : turf)));
-            setShowForm(false);
-            setEditingTurf(null);
-        } catch (error) {
-            console.error("Failed to update turf:", error);
-        }
-    };
+    // const updateTurf = async (updatedTurf) => {
+    //     if (!updatedTurf || !updatedTurf.id) {
+    //         console.error("No turf or turf ID provided for update");
+    //         return;
+    //     }
+    //     try {
+    //         const response = await axios.put(`http://localhost:8081/api/turfs/${updatedTurf.id}`, updatedTurf);
+    //         setTurfs(turfs.map(turf => (turf.id === updatedTurf.id ? response.data : turf)));
+    //         setShowForm(false);
+    //         setEditingTurf(null);
+    //     } catch (error) {
+    //         console.error("Failed to update turf:", error);
+    //     }
+    // };
 
     const deleteTurf = async (id) => {
         try {
