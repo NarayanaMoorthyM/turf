@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TurfCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faHeart, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaRupeeSign } from 'react-icons/fa';
