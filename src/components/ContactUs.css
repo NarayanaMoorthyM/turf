@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url("..\\bg1.jpg"); /* Adjust the path */
+/*   background-image: url("..\\bg1.jpg"); /* Adjust the path */ */
   background-size: cover; /* Cover the full section */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* No repetition */
