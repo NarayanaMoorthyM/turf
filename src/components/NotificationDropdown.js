@@ -11,7 +11,7 @@ const NotificationDropdown = ({ onNotificationClick, onNotificationDelete, onSav
     const [notifications, setNotifications] = useState([]);
     const [editingNotification, setEditingNotification] = useState(null);
     const [formData, setFormData] = useState({ title: '', ownerName: '' });
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     useEffect(() => {
         const fetchNotifications = async () => {
