@@ -3,7 +3,7 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #f8f9fa;
   color: #343a40;
-  background-image: url("..\\bg1.jpg"); /* Adjust the path */
+/*   background-image: url("..\\bg1.jpg"); /* Adjust the path */ */
   background-size: cover; /* Cover the full section */
   background-position: center; /* Center the image */
   background-repeat: no-repeat; /* No repetition */
